@@ -1,4 +1,4 @@
-# AirlineMAnagementSystem
+# Airline Management System
 # Problem Description
 •	Use a data structure like an array, linked list, or hash table to store flight 
   records(flightnumber,name,source,destination).
