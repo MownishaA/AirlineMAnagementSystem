@@ -1,161 +1,145 @@
-package airlinemanagementsystem;
+package airline;
 
 import java.awt.*;
 import java.awt.event.*;
 
-public class FlightList extends Frame implements ActionListener {
-    private static final long serialVersionUID = 1L;
-    private Button backButton, bookButton;
-    private List flightList;
-    Image backgroundImage;
+public class FlightList extends Frame {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List flightList;
+    private TextField searchField;
 
     public FlightList() {
-        // Set up the frame
-        setTitle("Available Flights");
-        setExtendedState(Frame.MAXIMIZED_BOTH); // Make the frame fullscreen
+        // Set title for the window
+        setTitle("Flight List");
+
+        // Create the background panel with an image
+        BackgroundPanel backgroundPanel = new BackgroundPanel("C:\\Users\\Mounith\\Desktop\\study\\oops assign\\air3.jpg");
+        backgroundPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Create a search field
+        searchField = new TextField(20); // Width of the search field
+        searchField.setFont(new Font("Arial", Font.BOLD, 14));
+        searchField.setBackground(Color.WHITE);
+        searchField.setForeground(Color.BLACK);
+        searchField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                filterFlights(); // Call the filter function on key release
+            }
+        });
+
+        // Add the search field to the panel
+        gbc.gridx = 0; // Column 0
+        gbc.gridy = 0; // Row 0
+        gbc.insets = new Insets(20, 20, 10, 20); // Padding
+        backgroundPanel.add(searchField, gbc); // Add search field to the panel
+
+        // Create a list of flights
+        flightList = new List(20); // Specify the number of visible rows
+        flightList.setFont(new Font("Arial", Font.PLAIN, 14));
+        flightList.setBackground(Color.LIGHT_GRAY);
+        flightList.setForeground(Color.BLACK);
+
+        // Sample flight data
+        addFlightData();
+
+        // Create a scroll pane and add the flight list to it
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.add(flightList); // Add flight list to the scroll pane
+        scrollPane.setPreferredSize(new Dimension(400, 300)); // Set preferred size for scroll pane
+              // Set GridBagConstraints for the scroll pane
+        gbc.gridy = 1; // Row 1
+        gbc.insets = new Insets(0, 20, 20, 20); // Reset padding
+        backgroundPanel.add(scrollPane, gbc); // Add scroll pane to the panel
+        gbc.gridy = 5;
+        Button flight = new Button("Book Flight");
+        flight.setBackground(Color.BLUE);
+        flight.setForeground(Color.BLACK);
+       
+        
+        gbc.gridy = 3;
+        Button exitButton = new Button("Back");
+        exitButton.setBackground(Color.RED);
+        exitButton.setForeground(Color.BLACK);
+       
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == flight) {
+                    new FlightBooking(); // Open flight list
+                    dispose(); // Close the home window
+                } else if (e.getSource() == exitButton) {
+                    new Home(); // Open flight booking
+                    dispose();
+                }
+            }
+        });
+
+        // Set GridBagConstraints for the button
+        gbc.gridy = 2; // Row 2
+        backgroundPanel.add(exitButton, gbc); // Add exit button to the panel
+
+        // Add the main panel to the frame
+        add(backgroundPanel);
+
+        // Set window properties for full screen
+        setExtendedState(Frame.MAXIMIZED_BOTH); // Maximize to full screen
         setUndecorated(true); // Remove window decorations
-        setLayout(new BorderLayout());
-        setBackground(new Color(240, 230, 250)); // Light lavender background
-        backgroundImage = Toolkit.getDefaultToolkit().getImage("C:\\Users\\Mounith\\Pictures\\airline.png");
-        // Initialize the flight list with scrolling capability
-        flightList = new List(58); // Set a fixed number of visible items
-        flightList.add("Flight 101: Chennai to Mumbai");
-        flightList.add("Flight 202: Chennai to Bangalore");
-        flightList.add("Flight 303: Chennai to Delhi");
-        flightList.add("Flight 404: Chennai to Goa");
-        flightList.add("Flight 505: Chennai to Kashmir");
-        flightList.add("Flight 606: Chennai to Kolkata");
-        flightList.add("Flight 707: Chennai to Hyderabad");
-        flightList.add("Flight 808: Chennai to Jaipur");
-        flightList.add("Flight 909: Chennai to Ahmedabad");
-        flightList.add("Flight 1010: Chennai to Cochin");
-        flightList.add("Flight 1111: Chennai to Lucknow");
-        flightList.add("Flight 1212: Chennai to Chandigarh");
-        flightList.add("Flight 1313: Chennai to Srinagar");
-        flightList.add("Flight 1414: Chennai to Udaipur");
-        flightList.add("Flight 1515: Chennai to Mangalore");
-        flightList.add("Flight 1616: Chennai to Nagpur");
-        flightList.add("Flight 1717: Chennai to Varanasi");
-        flightList.add("Flight 1818: Chennai to Indore");
-        flightList.add("Flight 1919: Chennai to Patna");
-        flightList.add("Flight 2020: Chennai to Amritsar");
-        flightList.add("Flight 2121: Chennai to Surat");
-        flightList.add("Flight 2222: Chennai to Vadodara");
-        flightList.add("Flight 2323: Chennai to Aurangabad");
-        flightList.add("Flight 2424: Chennai to Jodhpur");
-        flightList.add("Flight 2525: Chennai to Guwahati");
-        flightList.add("Flight 2626: Chennai to Ranchi");
-        flightList.add("Flight 2727: Chennai to Bhopal");
-        flightList.add("Flight 2828: Chennai to Siliguri");
-        flightList.add("Flight 2929: Chennai to Tirupati");
-        flightList.add("Flight 3030: Chennai to Nashik");
-        flightList.add("Flight 3131: Chennai to Thiruvananthapuram");
-        flightList.add("Flight 3232: Chennai to Bhubaneswar");
-        flightList.add("Flight 3333: Chennai to Gwalior");
-        flightList.add("Flight 3434: Chennai to Jaisalmer");
-        flightList.add("Flight 3535: Chennai to Port Blair");
-        flightList.add("Flight 3636: Chennai to Dibrugarh");
-        flightList.add("Flight 3737: Chennai to Bhavnagar");
-        flightList.add("Flight 3838: Chennai to Dehradun");
-        flightList.add("Flight 3939: Chennai to Jorhat");
-        flightList.add("Flight 4040: Chennai to Madurai");
-        flightList.add("Flight 4141: Chennai to Coimbatore");
-        flightList.add("Flight 4242: Chennai to Raipur");
-        flightList.add("Flight 4343: Chennai to Salem");
-        flightList.add("Flight 4444: Chennai to Imphal");
-        flightList.add("Flight 4545: Chennai to Sikkim");
-        flightList.add("Flight 4646: Chennai to Aizawl");
-        flightList.add("Flight 4747: Chennai to Shillong");
-        flightList.add("Flight 4848: Chennai to Kohima");
-        flightList.add("Flight 4949: Chennai to Agartala");
-        flightList.add("Flight 5050: Chennai to Cuttack");
-        flightList.add("Flight 5151: Chennai to Aligarh");
-        flightList.add("Flight 5252: Chennai to Jabalpur");
-        flightList.add("Flight 5353: Chennai to Gaya");
-        flightList.add("Flight 5454: Chennai to Tiruvannamalai");
-        flightList.add("Flight 5555: Chennai to Kanyakumari");
+        setVisible(true); // Make frame visible
 
-        // Centering the flight list in a scrollable area
-        Panel centerPanel = new Panel();
-        centerPanel.setLayout(new GridBagLayout());
-        centerPanel.setBackground(new Color(240, 240, 255)); // Light blue panel
-        
-        // Add flight list to the center panel
-        centerPanel.add(flightList, new GridBagConstraints());
-
-        // Add the centered flight list to the center of the main frame
-        add(centerPanel, BorderLayout.CENTER);
-
-        // Initialize buttons with styles
-        Panel buttonPanel = new Panel();
-        buttonPanel.setLayout(new FlowLayout());
-
-        bookButton = new Button("Book Flight");
-        bookButton.setBackground(new Color(70, 130, 180)); // Steel blue
-        bookButton.setForeground(Color.WHITE);
-        buttonPanel.add(bookButton);
-
-        backButton = new Button("Back to Home");
-        backButton.setBackground(new Color(220, 20, 60)); // Crimson
-        backButton.setForeground(Color.WHITE);
-        buttonPanel.add(backButton);
-        
-        // Add button panel to the bottom
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        // Add action listeners
-        bookButton.addActionListener(this);
-        backButton.addActionListener(this);
-
-        // Set frame visibility and close operation
-        setVisible(true);
+        // Add window listener for closing the window
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent we) {
                 dispose(); // Close the window
             }
         });
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == backButton) {
-            new Home(); // Assuming Home is another Frame or class
-            dispose(); // Close the flight list window
-        } else if (e.getSource() == bookButton) {
-        	new AirlineManagementSystemAWT();
-           
+    private void addFlightData() {
+        // Sample flight data
+        flightList.add("Flight 101 - Mumbai to Delhi");
+        flightList.add("Flight 102 - Delhi to Bengaluru");
+        flightList.add("Flight 103 - Bengaluru to Hyderabad");
+        flightList.add("Flight 104 - Chennai to Kolkata");
+        flightList.add("Flight 105 - Hyderabad to Pune");
+        flightList.add("Flight 106 - Kolkata to Jaipur");
+        flightList.add("Flight 107 - Ahmedabad to Surat");
+        flightList.add("Flight 108 - Surat to Mumbai");
+        flightList.add("Flight 109 - Delhi to Chennai");
+        flightList.add("Flight 110 - Bengaluru to Kochi");
+        flightList.add("Flight 111 - Hyderabad to Chandigarh");
+        flightList.add("Flight 112 - Kolkata to Goa");
+        flightList.add("Flight 113 - Jaipur to Udaipur");
+        flightList.add("Flight 114 - Ahmedabad to Jodhpur");
+        flightList.add("Flight 115 - Pune to Nagpur");
+        flightList.add("Flight 116 - Chennai to Visakhapatnam");
+        flightList.add("Flight 117 - Kochi to Bengaluru");
+    }
+
+    private void filterFlights() {
+        String query = searchField.getText().toLowerCase(); // Get the search query
+        flightList.removeAll(); // Clear the current list
+
+        // Re-add flights that match the search query
+        addFlightData(); // Re-add all flight data temporarily
+        for (int i = 0; i < flightList.getItemCount(); i++) {
+            String flight = flightList.getItem(i);
+            if (!flight.toLowerCase().contains(query)) {
+                flightList.remove(i); // Remove flights that do not match
+                i--; // Decrement index due to removal
+            }
         }
     }
 
     public static void main(String[] args) {
-        new FlightList(); // Start the Flight List window for testing
+        new FlightList();
     }
 }
 
-class Home extends Frame {
-    public Home() {
-        setTitle("Home");
-        setSize(400, 300);
-        setLayout(new FlowLayout());
-        setBackground(new Color(230, 230, 250)); // Light lavender background
+// Background panel class to draw an image
 
-        Label welcomeLabel = new Label("Welcome to the Airline Management System!");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        add(welcomeLabel);
-
-        Button flightListButton = new Button("View Available Flights");
-        flightListButton.setBackground(new Color(70, 130, 180)); // Steel blue
-        flightListButton.setForeground(Color.GREEN);
-        flightListButton.addActionListener(e -> {
-            new FlightList(); // Open flight list
-            dispose(); // Close the home window
-        });
-
-        add(flightListButton);
-        setVisible(true);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent we) {
-                dispose(); // Close the window
-            }
-        });
-    }
-}
