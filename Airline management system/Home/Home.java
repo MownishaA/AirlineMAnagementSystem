@@ -1,4 +1,4 @@
-package airlinemanagementsystem;
+package airline;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,7 +11,7 @@ public class Home extends Frame implements ActionListener {
 
     public Home() {
         // Load the background image
-        backgroundImage = Toolkit.getDefaultToolkit().getImage("C:\\Users\\Mounith\\Pictures\\airline.png");
+        backgroundImage = Toolkit.getDefaultToolkit().getImage("C:\\Users\\Mounith\\Desktop\\study\\Project\\airline.png");
 
         setTitle("Airline Management System - Home");
         setExtendedState(Frame.MAXIMIZED_BOTH); // Maximize the window
@@ -22,7 +22,9 @@ public class Home extends Frame implements ActionListener {
 
         // Initialize and add welcome label
         welcomeLabel = new Label("Welcome to the Airline Management System!", Label.CENTER);
-        welcomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 36));
+        welcomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
+        //welcomeLabel.setBackground(Color.GREEN);
+        //welcomeLabel.setForeground(Color.BLACK);
         gbc.gridwidth = 1;
         gbc.gridy = 0;
         gbc.gridx = 0;
@@ -32,14 +34,20 @@ public class Home extends Frame implements ActionListener {
         gbc.gridwidth = 1;
         gbc.gridy = 1;
         viewFlightsButton = new Button("View Flights");
+        viewFlightsButton.setBackground(Color.GREEN);
+        viewFlightsButton.setForeground(Color.BLACK);
         add(viewFlightsButton, gbc);
 
         gbc.gridy = 2;
         bookFlightButton = new Button("Book a Flight");
+        bookFlightButton.setBackground(Color.BLUE);
+        bookFlightButton.setForeground(Color.BLACK);
         add(bookFlightButton, gbc);
 
         gbc.gridy = 3;
         exitButton = new Button("Exit");
+        exitButton.setBackground(Color.RED);
+        exitButton.setForeground(Color.BLACK);
         add(exitButton, gbc);
 
         // Add action listeners
@@ -66,7 +74,7 @@ public class Home extends Frame implements ActionListener {
             new FlightList(); // Open flight list
             dispose(); // Close the home window
         } else if (e.getSource() == bookFlightButton) {
-            new AirlineManagementSystemAWT(); // Open flight booking
+            new FlightBooking(); // Open flight booking
             dispose();
         } else if (e.getSource() == exitButton) {
             System.exit(0); // Exit the application
